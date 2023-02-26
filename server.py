@@ -67,13 +67,34 @@ def book(competition, club):
         return render_template('welcome.html', club=club, competitions=competitions)
 
 
+def update_places(competition: dict, places_required:int) -> bool:
+    """Book (and deduce) places in a given competition
+
+    param competition: dictionary loaded from database and describing a competition
+    param places_required: how many places the club wants to book
+    return: True if the places could be booked
+    """
+    nbr_places = int(competition['numberOfPlaces'])
+
+    # Pay attention to the 12 places limit for each club
+    if 0 < places_required < 13:
+        competition['numberOfPlaces'] = nbr_places - places_required
+        return True
+    else:
+        return False
+
+
 @app.route('/purchasePlaces', methods=['POST'])
 def purchase_places():
     competition = [c for c in competitions if c['name'] == request.form['competition']][0]
     club = [c for c in clubs if c['name'] == request.form['club']][0]
+
     places_required = int(request.form['places'])
-    competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - places_required
-    flash('Great-booking complete!')
+    if update_places(competition, places_required):
+        flash('Great-booking complete!')
+    else:
+        flash('You tried to book an invalid number of places, sorry')
+
     return render_template('welcome.html', club=club, competitions=competitions)
 
 
