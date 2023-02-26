@@ -67,7 +67,7 @@ def book(competition, club):
         return render_template('welcome.html', club=club, competitions=competitions)
 
 
-def update_places(competition: dict, places_required:int) -> bool:
+def update_places(competition: dict, places_required: int, nbr_points_club: int) -> bool:
     """Book (and deduce) places in a given competition
 
     param competition: dictionary loaded from database and describing a competition
@@ -77,7 +77,7 @@ def update_places(competition: dict, places_required:int) -> bool:
     nbr_places = int(competition['numberOfPlaces'])
 
     # Pay attention to the 12 places limit for each club
-    if 0 < places_required < 13:
+    if (0 < places_required < 13) and (places_required <= nbr_points_club):
         competition['numberOfPlaces'] = nbr_places - places_required
         return True
     else:
