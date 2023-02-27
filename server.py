@@ -67,7 +67,7 @@ def book(competition, club):
         return render_template('welcome.html', club=club, competitions=competitions)
 
 
-def update_places(competition: dict, places_required: int, nbr_points_club: int) -> bool:
+def update_places(competition: dict, places_required: int, club: dict) -> bool:
     """Book (and deduce) places in a given competition
 
     param competition: dictionary loaded from database and describing a competition
@@ -75,9 +75,10 @@ def update_places(competition: dict, places_required: int, nbr_points_club: int)
     return: True if the places could be booked
     """
     nbr_places = int(competition['numberOfPlaces'])
+    club_nbr_points = int(club['points'])
 
-    # Pay attention to the 12 places limit for each club
-    if (0 < places_required < 13) and (places_required <= nbr_points_club):
+    # Pay attention to the 12 places limit for each club, and the number of points available
+    if (0 < places_required < 13) and (places_required <= club_nbr_points):
         competition['numberOfPlaces'] = nbr_places - places_required
         return True
     else:
@@ -90,7 +91,8 @@ def purchase_places():
     club = [c for c in clubs if c['name'] == request.form['club']][0]
 
     places_required = int(request.form['places'])
-    if update_places(competition, places_required):
+
+    if update_places(competition, places_required, club):
         flash('Great-booking complete!')
     else:
         flash('You tried to book an invalid number of places, sorry')
