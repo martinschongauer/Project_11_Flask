@@ -1,5 +1,6 @@
 import json
 from flask import Flask, render_template, request, redirect, flash, url_for
+from datetime import datetime
 
 
 def load_clubs():
@@ -56,10 +57,35 @@ def show_summary():
         return render_template('welcome.html', club=club, competitions=competitions)
 
 
+def check_date_validity(competition: dict) -> bool:
+    """Checks whether a given competition is over through its date
+
+    param competition: dictionary containing competition infos
+    return: True if we can subscribe to a competition (future competition)
+    """
+    current_time = datetime.now()
+    competition_time_str = competition['date']
+    competition_time = datetime.strptime(competition_time_str, "%Y-%m-%d %H:%M:%S")
+    return current_time < competition_time
+
+
 @app.route('/book/<competition>/<club>')
 def book(competition, club):
     found_club = [c for c in clubs if c['name'] == club][0]
     found_competition = [c for c in competitions if c['name'] == competition][0]
+
+    # Required if we redirect to welcome.html
+    club_obj = [c for c in clubs if c['name'] == club][0]
+
+    # Filter errors which appeared while retrieving infos
+    if not found_club or not found_competition:
+        flash("Something went wrong-please try again")
+        return render_template('welcome.html', club=club_obj, competitions=competitions)
+
+    # Make sure that the competition does not belong to the past...
+    if not check_date_validity(found_competition):
+        flash("Selected competition is over")
+        return render_template('welcome.html', club=club_obj, competitions=competitions)
 
     # The number of places is limited by either 12 OR the number of points available
     if found_club and found_competition:
