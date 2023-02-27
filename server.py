@@ -89,7 +89,10 @@ def update_places(competition: dict, places_required: int, club: dict) -> bool:
         # Make sure that the competition cannot run out of places
         if competition_places < 0:
             return False
+        # Update values in both competition and club dictionaries
         competition['numberOfPlaces'] = competition_places
+        club_nbr_points = club_nbr_points - places_required
+        club['points'] = str(club_nbr_points)
         return True
     else:
         return False

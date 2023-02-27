@@ -44,3 +44,11 @@ def test_not_enough_points(database_fixture):
     places_required = 10
     return_value = update_places(database_fixture['competition'], places_required, database_fixture['club_2'])
     assert not return_value
+
+
+def test_club_points_updated(database_fixture):
+    club = database_fixture['club_1']
+    places_required = 10
+    expected_points = int(club['points']) - places_required
+    update_places(database_fixture['competition'], places_required, club)
+    assert int(club['points']) == expected_points
