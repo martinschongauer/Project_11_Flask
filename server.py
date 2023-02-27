@@ -43,7 +43,7 @@ def check_email(email: str) -> dict:
         return clubs_found[0]
 
 
-@app.route('/showSummary',methods=['POST'])
+@app.route('/showSummary', methods=['POST'])
 def show_summary():
     """Log in and render main page
     """
@@ -85,7 +85,11 @@ def update_places(competition: dict, places_required: int, club: dict) -> bool:
 
     # Pay attention to the 12 places limit for each club, and the number of points available
     if (0 < places_required < 13) and (places_required <= club_nbr_points):
-        competition['numberOfPlaces'] = nbr_places - places_required
+        competition_places = nbr_places - places_required
+        # Make sure that the competition cannot run out of places
+        if competition_places < 0:
+            return False
+        competition['numberOfPlaces'] = competition_places
         return True
     else:
         return False
