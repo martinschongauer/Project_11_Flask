@@ -63,7 +63,7 @@ def book(competition, club):
 
     # The number of places is limited by either 12 OR the number of points available
     if found_club and found_competition:
-        max_places = max(12, int(found_club['points']))
+        max_places = min(12, int(found_club['points']))
         return render_template('booking.html',
                                club=found_club,
                                competition=found_competition,
