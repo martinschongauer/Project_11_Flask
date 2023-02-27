@@ -9,17 +9,19 @@
 
 <table>
       <tr>
-        <th>Mois</th>
-        <th>Data</th>
+        <th>Club name</th>
+        <th>Secretary email</th>
+        <th>Points count</th>
       </tr>
-      <tr>
-        <td>Janvier</td>
-        <td>10.01.2014</td>
-      </tr>
-      <tr>
-        <td>Février</td>
-        <td>10.01.2014</td>
-      </tr>
+
+        <tr>
+        {% for club in clubs %}
+        <th>{{club['name']}}</th>
+        <th>{{club['email']}}</th>
+        <th>{{club['points']}}</th>
+        {% endfor %}
+        </tr>
+
 </table>
 
 </body>

@@ -141,7 +141,7 @@ def purchase_places():
 
 @app.route('/printClubs')
 def print_clubs():
-    return render_template('board.html')
+    return render_template('board.html', clubs=clubs)
 
 
 @app.route('/logout')
