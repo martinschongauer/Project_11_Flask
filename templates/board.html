@@ -4,10 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Available points for all clubs</title>
+    <link href="styles.css" rel="stylesheet" media="all" />
 </head>
 <body>
 
 <table>
+    <caption>List of partner clubs</caption>
       <tr>
         <th>Club name</th>
         <th>Secretary email</th>
@@ -17,12 +19,13 @@
         <tr>
         {% for club in clubs %}
         <th>{{club['name']}}</th>
-        <th>{{club['email']}}</th>
-        <th>{{club['points']}}</th>
+        <td>{{club['email']}}</td>
+        <td>{{club['points']}}</td>
         {% endfor %}
         </tr>
-
 </table>
+
+<a href="/">Go back to login page</a>
 
 </body>
 </html>
