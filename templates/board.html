@@ -9,6 +9,12 @@
     th, td {
 	    border: 1px solid black;
 	    padding: 8px;
+	    text-align: center;
+        vertical-align: middle;
+    }
+    h1 {
+	    border: 1px solid black;
+	    padding: 8px;
     }
     </style>
 
@@ -16,7 +22,7 @@
 <body>
 
 <table>
-    <caption>List of partner clubs</caption>
+    <caption><b><font size="5">List of partner clubs</font></b></caption>
       <tr>
         <th>Club name</th>
         <th>Secretary email</th>
@@ -28,9 +34,11 @@
         <th>{{club['name']}}</th>
         <td>{{club['email']}}</td>
         <td>{{club['points']}}</td>
-        {% endfor %}
         </tr>
+        {% endfor %}
 </table>
+
+</br>
 
 <a href="/">Go back to login page</a>
 
