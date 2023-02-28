@@ -87,9 +87,9 @@ def book(competition, club):
         flash("Selected competition is over")
         return render_template('welcome.html', club=club_obj, competitions=competitions)
 
-    # The number of places is limited by either 12 OR the number of points available
+    # The number of places is limited by either 12 OR the number of points available OR the competition itself
     if found_club and found_competition:
-        max_places = min(12, int(found_club['points']))
+        max_places = min(12, int(found_club['points']), int(found_competition['numberOfPlaces']))
         return render_template('booking.html',
                                club=found_club,
                                competition=found_competition,
