@@ -157,6 +157,23 @@ def test_invalid_booking(client):
     assert data.find("You tried to book an invalid number of places") != -1
 
 
+def test_invalid_booking_2(client):
+    club = "Simply Lift"
+    competition = "Spring Festival 2"
+    places = "11"
+
+    # This time, we should be rejected because there are not enough places left for the competition
+    rv = client.post(
+        "/purchasePlaces",
+        data=dict(club=club, competition=competition, places=places),
+        follow_redirects=True
+        )
+    assert rv.status_code == 200
+
+    data = rv.data.decode()
+    assert data.find("You tried to book an invalid number of places") != -1
+
+
 def test_valid_booking(client):
     club = "Simply Lift"
     competition = "Spring Festival"
