@@ -174,6 +174,34 @@ def test_invalid_booking_2(client):
     assert data.find("You tried to book an invalid number of places") != -1
 
 
+def test_invalid_club_name(client):
+    club = "Invalid"
+    competition = "Spring Festival"
+    places = "10"
+
+    # Purchase with a non-existing club name
+    rv = client.post(
+        "/purchasePlaces",
+        data=dict(club=club, competition=competition, places=places),
+        follow_redirects=True
+        )
+    assert rv.status_code == 200
+
+    data = rv.data.decode()
+    assert data.find("Sorry, a database error was detected.") != -1
+
+
+def test_invalid_competition_name(client):
+    url = "/book/Invalid/Simply%20Lift"
+
+    # Getting an invalid booking URL
+    rv = client.get(url,follow_redirects=True)
+    assert rv.status_code == 200
+
+    data = rv.data.decode()
+    assert data.find("Sorry, a database error was detected.") != -1
+
+
 def test_valid_booking(client):
     club = "Simply Lift"
     competition = "Spring Festival"

@@ -73,6 +73,24 @@ competitions = load_competitions()
 clubs = load_clubs()
 
 
+def get_club_and_competition(club: str, competition: str) -> (bool, dict, dict):
+    """Retrieve a club and a competition in the list, with their name
+
+    param club: club name
+    param competition: competition name
+    return: True if they were found + objects
+    """
+    competition = [c for c in competitions if c['name'] == competition]
+    club = [c for c in clubs if c['name'] == club]
+
+    # Something wrong
+    if not competition or not club:
+        return False, None, None
+
+    # No error
+    return True, club[0], competition[0]
+
+
 def create_app():
     app = Flask(__name__)
     # app.config.from_object(config)
@@ -96,21 +114,16 @@ def create_app():
 
     @app.route('/book/<competition>/<club>')
     def book(competition, club):
-        found_club = [c for c in clubs if c['name'] == club][0]
-        found_competition = [c for c in competitions if c['name'] == competition][0]
-
-        # Required if we redirect to welcome.html
-        club_obj = [c for c in clubs if c['name'] == club][0]
+        ok_flag, found_club, found_competition = get_club_and_competition(club, competition)
 
         # Filter errors which appeared while retrieving infos
-        if not found_club or not found_competition:
-            flash("Something went wrong-please try again")
-            return render_template('welcome.html', club=club_obj, competitions=competitions)
+        if not ok_flag:
+            return render_template('index.html', db_error=True)
 
         # Make sure that the competition does not belong to the past...
         if not check_date_validity(found_competition):
             flash("Selected competition is over")
-            return render_template('welcome.html', club=club_obj, competitions=competitions)
+            return render_template('welcome.html', club=found_club, competitions=competitions)
 
         # If we arrived here, it's OK
         max_places = min(12, int(found_club['points']), int(found_competition['numberOfPlaces']))
@@ -121,8 +134,11 @@ def create_app():
 
     @app.route('/purchasePlaces', methods=['POST'])
     def purchase_places():
-        competition = [c for c in competitions if c['name'] == request.form['competition']][0]
-        club = [c for c in clubs if c['name'] == request.form['club']][0]
+        ok_flag, club, competition = get_club_and_competition(request.form['club'], request.form['competition'])
+
+        # Filter errors which appeared while retrieving infos
+        if not ok_flag:
+            return render_template('index.html', db_error=True)
 
         places_required = int(request.form['places'])
 
