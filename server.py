@@ -116,9 +116,9 @@ def create_app():
     def book(competition, club):
         ok_flag, found_club, found_competition = get_club_and_competition(club, competition)
 
-        # Filter errors which appeared while retrieving infos
+        # Invalid URL, should not happen (hack attempt? -> Kick user back to login page)
         if not ok_flag:
-            return render_template('index.html', db_error=True)
+            return redirect("/")
 
         # Make sure that the competition does not belong to the past...
         if not check_date_validity(found_competition):
@@ -136,9 +136,9 @@ def create_app():
     def purchase_places():
         ok_flag, club, competition = get_club_and_competition(request.form['club'], request.form['competition'])
 
-        # Filter errors which appeared while retrieving infos
+        # Most probably some malicious attempt...
         if not ok_flag:
-            return render_template('index.html', db_error=True)
+            return redirect("/")
 
         places_required = int(request.form['places'])
 

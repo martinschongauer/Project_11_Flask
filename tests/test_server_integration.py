@@ -188,7 +188,7 @@ def test_invalid_club_name(client):
     assert rv.status_code == 200
 
     data = rv.data.decode()
-    assert data.find("Sorry, a database error was detected.") != -1
+    assert data.find("Welcome to the GUDLFT Registration Portal!") != -1
 
 
 def test_invalid_competition_name(client):
@@ -199,7 +199,7 @@ def test_invalid_competition_name(client):
     assert rv.status_code == 200
 
     data = rv.data.decode()
-    assert data.find("Sorry, a database error was detected.") != -1
+    assert data.find("Welcome to the GUDLFT Registration Portal!") != -1
 
 
 def test_valid_booking(client):
