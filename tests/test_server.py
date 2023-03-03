@@ -98,7 +98,7 @@ def test_get_points_board(client):
 """
 
 
-def test_spring_festival_fail(client):
+def test_spring_festival(client):
     login_mail = "john@simplylift.co"
     rv = client.post(
         "/showSummary", data=dict(email=login_mail), follow_redirects=True
