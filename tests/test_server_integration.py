@@ -195,7 +195,7 @@ def test_invalid_competition_name(client):
     url = "/book/Invalid/Simply%20Lift"
 
     # Getting an invalid booking URL
-    rv = client.get(url,follow_redirects=True)
+    rv = client.get(url, follow_redirects=True)
     assert rv.status_code == 200
 
     data = rv.data.decode()
