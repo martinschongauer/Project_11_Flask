@@ -58,20 +58,18 @@
 6. Testing
     
     The tests have been written for the pytest tools (unitary/integration/functional) and for locust (performances). These tools should be installed automatically from  requirements.txt. If not, the following commands can be launched:
-<code>
-    pip install pytest
-    pip install pytest-flask
-    pip install coverage
-    pip install pytest-cov
-    pip install locust
-</code>
+
+    $ pip install pytest
+    $ pip install pytest-flask
+    $ pip install coverage
+    $ pip install pytest-cov
+    $ pip install locust
 
     And the tests can be started from the main folder with either of the following commands (adding coverage/reports):
-<code>
-    pytest
-    pytest --cov=.
-    pytest --cov=. --cov-report html
-</code>
+
+    $ pytest
+    $ pytest --cov=.
+    $ pytest --cov=. --cov-report html
 
     locust can also be launched from the test folder.
     The coverage of the code with pytest is 100%.
